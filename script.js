@@ -73,7 +73,7 @@
     var light = a.classList.contains("cta-light");
     a.className = "group inline-flex items-center gap-3 rounded-full px-8 py-4 text-sm font-semibold tracking-[0.14em] uppercase transition-[transform,background-color,box-shadow] duration-500 hover:-translate-y-0.5 " +
       (light ? "bg-[var(--forest)] text-[var(--cream)] hover:shadow-[0_18px_40px_-18px_rgba(15,31,23,0.7)]" : "bg-[var(--cream)] text-[var(--forest)] hover:shadow-[0_18px_40px_-14px_rgba(217,180,90,0.55)]");
-    a.innerHTML = 'Plano Vitalício <span class="grid h-7 w-7 place-items-center rounded-full bg-[var(--gold)] text-[var(--forest)] transition-transform duration-500 group-hover:translate-y-0.5">' + ICON.arrow + "</span>";
+    a.innerHTML = (a.dataset.label || "Plano Vitalício") + ' <span class="grid h-7 w-7 place-items-center rounded-full bg-[var(--gold)] text-[var(--forest)] transition-transform duration-500 group-hover:translate-y-0.5">' + ICON.arrow + "</span>";
   });
 
   var row = MARQUEE.concat(MARQUEE, MARQUEE, MARQUEE);
@@ -167,11 +167,55 @@
   carousel($('[data-carousel="learn"]'), LEARN, "w-[44vw] sm:w-[220px] lg:w-[240px] aspect-[187/376] rounded-[18px] ring-1 ring-white/20", "Conteúdo da comunidade Umbanda para Todos");
   carousel($('[data-carousel="apostilas"]'), APOSTILAS, "w-[44vw] sm:w-[200px] lg:w-[220px] aspect-[243/342] rounded-[6px] shadow-[0_30px_50px_-25px_rgba(0,0,0,0.9)]", "Apostila Umbanda para Todos");
 
+  /* ---------- Plataformas ---------- */
+  var efImgs = function (row, n) { var out = []; for (var i = 0; i < n; i++) out.push("assets/platforms/ef-" + row + String(i).padStart(2, "0") + ".webp"); return out; };
+  var POSTER = "w-[40vw] sm:w-[190px] lg:w-[210px] aspect-[300/580] rounded-[16px] ring-1 ring-white/10";
+  var UPT = []; for (var u = 0; u < 19; u++) UPT.push("assets/platforms/upt-" + String(u).padStart(2, "0") + ".webp");
+  var PLATFORMS = [
+    {
+      id: "espiritualflix", number: "01", name: "EspiritualFlix", logo: "assets/platforms/ef-logo.png", banner: "assets/platforms/ef-hero.webp", accent: "#c9a2ff",
+      glow: "radial-gradient(closest-side, rgba(155,92,255,0.55), transparent)",
+      description: "A maior plataforma de espiritualidade da Conexão Estelar: cursos profissionalizantes com certificado, formações terapêuticas, aulas ao vivo toda semana, palestras, podcasts e uma biblioteca completa de apostilas.",
+      stats: [["+1.000", "aulas"], ["+50", "cursos com certificado"], ["+100", "apostilas"], ["Formação", "profissional"]],
+      features: ["Trilha do Reiki", "Formações terapêuticas e espirituais", "Terapias naturais e bem-estar", "Aulas ao vivo toda semana", "Palestras e podcasts", "Biblioteca do Terapeuta", "Filmes recomendados"],
+      rows: [["Cursos e formações", efImgs("a", 17), POSTER], ["Aulas ao vivo, práticas e bem-estar", efImgs("b", 19), POSTER]]
+    },
+    {
+      id: "umbanda-para-todos", number: "02", name: "Comunidade Umbanda para Todos", logo: "assets/logo_umbanda_para_todos.webp", banner: "assets/platforms/upt-banner.webp", accent: "#d9b45a",
+      glow: "radial-gradient(closest-side, rgba(217,180,90,0.45), transparent)",
+      description: "A comunidade do Sacerdote Edvilson: aulas de Umbanda, mediunidade e espiritualidade, apostilas, aulas ao vivo e mentoria em grupo — tudo também no aplicativo Hotmart, direto no seu celular.",
+      stats: [["+80", "aulas de +1 hora"], ["19", "trilhas de conteúdo"], ["Ao vivo", "toda semana"], ["App", "Hotmart no celular"]],
+      features: ["Cursos de Umbanda", "Mediunidade e sensitividade (2 módulos)", "Mentorias em grupo", "Aulas ao vivo", "Podcasts", "Jogo de cartas", "Eventos religiosos", "Ações e projetos sociais", "Grupo no WhatsApp"],
+      rows: [["Trilhas da comunidade", UPT, "w-[44vw] sm:w-[220px] lg:w-[240px] aspect-[276/398] rounded-[16px] ring-1 ring-white/10"], ["Conteúdos em destaque", LEARN, "w-[40vw] sm:w-[190px] lg:w-[210px] aspect-[187/376] rounded-[18px] ring-1 ring-white/20"]]
+    }
+  ];
+  $("#platforms").innerHTML = PLATFORMS.map(function (p, idx) {
+    var stats = p.stats.map(function (s) {
+      return '<div class="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3"><div class="font-display text-3xl leading-none text-[var(--cream)]">' + s[0] + '</div><div class="mt-1 text-[11px] uppercase tracking-[0.18em] text-[#f5f1e6]/65">' + s[1] + "</div></div>";
+    }).join("");
+    var chips = p.features.map(function (f) { return '<span class="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5 text-xs text-[#f5f1e6]/85">' + f + "</span>"; }).join("");
+    var rows = p.rows.map(function (r, i) {
+      return '<div class="reveal mt-16"><div class="mx-auto mb-6 flex max-w-6xl items-end justify-between gap-4 px-5"><h4 class="text-[11px] font-semibold uppercase tracking-[0.34em]" style="color:' + p.accent + '">' + r[0] + '</h4><span class="text-[11px] uppercase tracking-[0.2em] text-[#f5f1e6]/55">' + r[1].length + ' conteúdos</span></div><div data-pcar="' + idx + "-" + i + '"></div></div>';
+    }).join("");
+    return '<article class="relative"><div class="mx-auto grid max-w-6xl items-center gap-12 px-5 lg:grid-cols-2 lg:gap-16">' +
+      '<div class="reveal' + (idx % 2 ? " lg:order-2" : "") + '"><div class="flex items-center gap-4"><span class="font-display text-5xl leading-none" style="color:' + p.accent + '">' + p.number + '</span><span class="h-px flex-1 bg-white/15"></span></div>' +
+      '<img src="' + p.logo + '" alt="' + p.name + '" class="mt-6 h-16 w-auto object-contain md:h-20" />' +
+      '<h3 class="font-display mt-5 text-3xl leading-tight text-[var(--cream)] md:text-5xl">' + p.name + '</h3><p class="mt-4 text-base leading-relaxed text-[#f5f1e6]/80">' + p.description + "</p>" +
+      '<div class="mt-7 grid grid-cols-2 gap-3">' + stats + '</div><div class="mt-7 flex flex-wrap gap-2">' + chips + "</div></div>" +
+      '<div class="screen-wrap [perspective:1600px]"><div class="screen relative"><div class="absolute -inset-6 rounded-[40px] opacity-60 blur-3xl" style="background:' + p.glow + '"></div>' +
+      '<div class="relative overflow-hidden rounded-[22px] bg-black p-2 ring-1 ring-white/15 shadow-[0_50px_100px_-40px_rgba(0,0,0,0.9)]"><div class="mb-2 flex gap-1.5 px-2 pt-1"><span class="h-2.5 w-2.5 rounded-full bg-white/20"></span><span class="h-2.5 w-2.5 rounded-full bg-white/20"></span><span class="h-2.5 w-2.5 rounded-full bg-white/20"></span></div>' +
+      '<img src="' + p.banner + '" alt="' + p.name + '" loading="lazy" class="aspect-[16/9] w-full rounded-[14px] object-cover" /></div></div></div>' +
+      "</div>" + rows + "</article>";
+  }).join("");
+  PLATFORMS.forEach(function (p, idx) {
+    p.rows.forEach(function (r, i) { carousel(document.querySelector('[data-pcar="' + idx + "-" + i + '"]'), r[1], r[2], p.name + " — " + r[0]); });
+  });
+
   /* ---------- Revelação ao rolar ---------- */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } });
   }, { threshold: 0.1 });
-  document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+  document.querySelectorAll(".reveal, .screen-wrap").forEach(function (el) { io.observe(el); });
 
   /* ---------- Parallax suave do topo ---------- */
   var heroBg = $("#hero-bg"), heroVid = $("#hero-video-wrap"), hero = $("#hero");
